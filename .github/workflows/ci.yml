@@ -23,4 +23,4 @@ jobs:
       - name: Build and test
         run: |
           docker compose build
-          docker compose run --rm spotify_metadata_etl_project sh -c "poetry run ruff check . && poetry run isort --check ."
+          docker compose run --rm app sh -c "poetry run ruff check . && poetry run isort --check ."
