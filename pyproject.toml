@@ -6,11 +6,23 @@ authors = [
     {name = "TiamTee Ng",email = "tiamtee666@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
+    "ruff (>=0.9.1,<0.10.0)",
+    "pytest (>=8.3.4,<9.0.0)",
+    "isort (>=5.13.2,<6.0.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+
+[tool.poetry.group.test.dependencies]
+ruff = ">=0.9.1,<0.10.0"
+pytest = ">=8.3.4,<9.0.0"
+pytest-cov = "^4.1.0"
+isort = ">=5.13.2,<6.0.0"
