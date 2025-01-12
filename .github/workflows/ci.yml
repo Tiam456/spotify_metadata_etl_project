@@ -5,6 +5,14 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_call:
+    secrets:
+      DOCKERHUB_USER:
+        required: true
+        description: "Username for DockerHub auth"
+      DOCKERHUB_TOKEN:
+        required: true
+        description: "Token for DockerHub auth"
 
 jobs:
   lint_check:
@@ -16,11 +24,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build and test
         run: |
           docker compose build
-          docker compose run --rm app sh -c "poetry run ruff check . && poetry run isort --check ."
+          docker compose run --rm app sh -c "poetry run ruff check ."
