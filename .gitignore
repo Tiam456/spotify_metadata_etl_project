@@ -11,5 +11,3 @@
 *.tfstate.*
 # .tfvars files
 *.tfvars
-# .tf files
-*.tf
