@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket         = "spotify-metadata-etl-project-terraform-state"
-    key            = "terraform.tfstate"
+    key            = "tf-state-setup"
     region         = "eu-west-2"
     encrypt        = true
     dynamodb_table = "spotify-metadata-etl-project-terraform-state-lock"

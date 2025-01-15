@@ -2,10 +2,10 @@ services:
   terraform:
     image: hashicorp/terraform:latest
     volumes:
-      - .:/terraform
-    working_dir: /terraform
+      - ./setup:/tf/setup
+      - ./deploy:/tf/deploy
+    working_dir: /tf
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_DEFAULT_REGION=eu-west-2
-      - TF_WORKSPACE=${TF_WORKSPACE}
