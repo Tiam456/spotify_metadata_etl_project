@@ -3,3 +3,13 @@
 .mypy_cache
 .pytest_cache
 .env
+
+# Local .terraform directories
+**/.terraform/*
+# .tfstate files
+*.tfstate
+*.tfstate.*
+# .tfvars files
+*.tfvars
+# .tf files
+*.tf
