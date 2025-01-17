@@ -1,0 +1,26 @@
+name: Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        type: string
+        description: "Type 'CONFIRM' to proceed with destruction"
+        required: true
+
+jobs:
+  destroy:
+    name: Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.confirm == 'CONFIRM' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cd infra/
+          docker compose run --rm terraform -chdir=deploy/ init
+          docker compose run --rm terraform -chdir=deploy/ destroy -auto-approve

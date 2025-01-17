@@ -15,6 +15,9 @@ on:
         description: "Token for DockerHub auth"
 
 jobs:
+  test-lint:
+    uses: ./.github/workflows/ci.yml
+    name: Test and Lint
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
