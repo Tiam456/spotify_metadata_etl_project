@@ -124,7 +124,7 @@ resource "aws_security_group" "vpc_endpoints" {
   vpc_id      = aws_vpc.main.id
   name        = "endpoint_access"
   description = "Security group for VPC endpoints (ECR, CloudWatch, SSM, S3)"
-  ingress {
+  ingress { # inbound access
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -162,5 +162,21 @@ resource "aws_vpc_endpoint" "cloudwatch" {
   subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
   security_group_ids = [aws_security_group.vpc_endpoints.id]
 
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.eu-west-2.s3"
+  vpc_endpoint_type = "Gateway" # this is free
+  route_table_ids   = [aws_route_table.private_1.id, aws_route_table.private_2.id]
+}
+
+resource "aws_vpc_endpoint" "ssm" { # for ec2
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.eu-west-2.ssm"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  security_group_ids  = [aws_security_group.vpc_endpoints.id]
   private_dns_enabled = true
 }
