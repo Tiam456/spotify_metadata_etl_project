@@ -139,3 +139,31 @@ resource "aws_iam_user_policy_attachment" "ec2" {
   user       = aws_iam_user.cd_user.name
   policy_arn = aws_iam_policy.ec2.arn
 }
+
+# rds policy
+data "aws_iam_policy_document" "rds" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "rds:DescribeDBInstances",
+      "rds:DescribeDBSubnetGroups",
+      "rds:CreateDBSubnetGroup",
+      "rds:DeleteDBSubnetGroup",
+      "rds:CreateDBInstance",
+      "rds:DeleteDBInstance",
+      "rds:ModifyDBInstance",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "rds" {
+  name        = "${aws_iam_user.cd_user.name}-rds"
+  description = "create and delete RDS resources."
+  policy      = data.aws_iam_policy_document.rds.json
+}
+
+resource "aws_iam_user_policy_attachment" "rds" {
+  user       = aws_iam_user.cd_user.name
+  policy_arn = aws_iam_policy.rds.arn
+}
