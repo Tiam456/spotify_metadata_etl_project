@@ -88,6 +88,14 @@ resource "aws_subnet" "private_2" {
   availability_zone       = "eu-west-2b"
 }
 
+resource "aws_route_table" "private_1" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "private_2" {
+  vpc_id = aws_vpc.main.id
+}
+
 resource "aws_route_table_association" "private_1" {
   subnet_id      = aws_subnet.private_1.id
   route_table_id = aws_route_table.private_1.id
@@ -113,15 +121,46 @@ resource "aws_route" "private_2_nat_access" {
 # vpc endpoints allowing EC2 to access to ecr, cloudwatch, rds, s3 and redshift
 
 resource "aws_security_group" "vpc_endpoints" {
-  vpc_id = aws_vpc.main.id
-  name = "endpoint_access"
+  vpc_id      = aws_vpc.main.id
+  name        = "endpoint_access"
   description = "Security group for VPC endpoints (ECR, CloudWatch, SSM, S3)"
   ingress {
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = [aws_vpc.main.cidr_block]
   }
 }
 # to review later. need more detailed security group rules for rds, redshift etc etc
 # this is security group for vpc not ec2
+
+# endpoint for ecr
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id             = aws_vpc.main.id
+  service_name       = "com.amazonaws.eu-west-2.ecr.api"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id             = aws_vpc.main.id
+  service_name       = "com.amazonaws.eu-west-2.ecr.dkr"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "cloudwatch" {
+  vpc_id             = aws_vpc.main.id
+  service_name       = "com.amazonaws.eu-west-2.logs"
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  private_dns_enabled = true
+}
