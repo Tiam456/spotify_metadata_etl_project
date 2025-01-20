@@ -9,6 +9,8 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: detect-private-key
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.1
@@ -17,10 +19,9 @@ repos:
         args: [--fix]
     -   id: ruff-format
 
-repos:
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
+-   repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: "v1.97.0"
     hooks:
-    - id: terraform_fmt
-    - id: terraform_validate
-
+    -   id: terraform_fmt
+    -   id: terraform_validate
+    -   id: terraform_tflint
