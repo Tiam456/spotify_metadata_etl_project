@@ -11,4 +11,4 @@
 *.tfstate.*
 # .tfvars files
 *.tfvars
-**data**
+spotify_metadata_etl_project/data

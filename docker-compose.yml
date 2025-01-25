@@ -23,6 +23,6 @@ services:
       - PYTHONUNBUFFERED=1
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-    # command: poetry run pytest --cov=spotify_metadata_etl_project tests/ --cov-report=xml
+    command: poetry install && poetry run pytest --cov=spotify_metadata_etl_project tests/ --cov-report=xml
     depends_on:
       - postgres
