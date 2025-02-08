@@ -1,6 +1,15 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: spotify_ingestion_db
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+
   app:
     build:
       context: .
@@ -12,4 +21,8 @@ services:
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
-    command: poetry run pytest --cov=spotify_metadata_etl_project tests/ --cov-report=xml
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    command: poetry install && poetry run pytest --cov=spotify_metadata_etl_project tests/ --cov-report=xml
+    depends_on:
+      - postgres
